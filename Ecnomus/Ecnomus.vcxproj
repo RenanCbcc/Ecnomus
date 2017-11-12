@@ -111,6 +111,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Aircraftcarrier.h" />
+    <ClInclude Include="Battleship.h" />
+    <ClInclude Include="Component.h" />
+    <ClInclude Include="Cruiser.h" />
+    <ClInclude Include="Piece.h" />
+    <ClInclude Include="Position.h" />
+    <ClInclude Include="Seaplane.h" />
+    <ClInclude Include="Submarine.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Aircraftcarrier.cpp" />
+    <ClCompile Include="Battleship.cpp" />
+    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="Cruiser.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Piece.cpp" />
+    <ClCompile Include="Position.cpp" />
+    <ClCompile Include="Seaplane.cpp" />
+    <ClCompile Include="Submarine.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
