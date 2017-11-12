@@ -7,8 +7,8 @@ public:
 	Aircraftcarrier();
 	Aircraftcarrier(int, int);
 	~Aircraftcarrier();
-	string getName();
-	void initializePieces();
-	void updatePositonPieces();
+	string getName() override;
+	void initializePieces()override;
+	void updatePositonPieces()override;
 };
 

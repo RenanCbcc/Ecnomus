@@ -7,8 +7,8 @@ public:
 	Battleship();
 	Battleship(int,int);
 	~Battleship();
-	string getName();
-	void initializePieces();
-	void updatePositonPieces();
+	string getName()override;
+	void initializePieces()override;
+	void updatePositonPieces()override;
 };
 

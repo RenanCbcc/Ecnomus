@@ -8,9 +8,9 @@ public:
 	Cruiser(int,int);
 	~Cruiser();
 
-	string getName();
-	void initializePieces();
-	void updatePositonPieces();
+	string getName()override;
+	void initializePieces()override;
+	void updatePositonPieces()override;
 
 };
 

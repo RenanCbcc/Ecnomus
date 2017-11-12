@@ -1,11 +1,13 @@
 #pragma once
 #include "Position.h"
+#include "Interface.h"
 #include "Piece.h"
 #include <string>
 #include <vector>
-
+#include <list>
 using namespace std;
-class Component
+class Component :
+	public Interface
 {
 public:
 	Component();

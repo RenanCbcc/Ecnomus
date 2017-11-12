@@ -7,8 +7,8 @@ public:
 	Submarine();
 	Submarine(int, int);
 	~Submarine();
-	string getName();
-	void initializePieces();
-	void updatePositonPieces();
+	string getName()override;
+	void initializePieces()override;
+	void updatePositonPieces()override;
 };
 

@@ -28,7 +28,7 @@ void Battleship::initializePieces()
 	pieces = { Piece(position.getRow(), position.getColumn()),
 		Piece(position.getRow(), position.getColumn() + 1),
 		Piece(position.getRow(), position.getColumn() + 2),
-		Piece(position.getRow(), position.getColumn() + 3),};
+		Piece(position.getRow(), position.getColumn() + 3)};
 
 }
 
