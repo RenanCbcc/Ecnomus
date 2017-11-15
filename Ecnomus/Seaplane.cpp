@@ -19,7 +19,7 @@ Seaplane::~Seaplane()
 
 }
 
-string Seaplane::getName() {
+std::string Seaplane::getName() {
 	return "Seaplane";
 }
 void Seaplane::initializePieces() {

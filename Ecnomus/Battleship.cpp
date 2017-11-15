@@ -18,7 +18,7 @@ Battleship::~Battleship()
 {
 }
 
-string Battleship::getName()
+std::string Battleship::getName()
 {
 	return "Battleship";
 }

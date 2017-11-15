@@ -1,29 +1,29 @@
 #pragma once
+
 #include "Position.h"
-#include "Interface.h"
 #include "Piece.h"
 #include <string>
 #include <vector>
 #include <list>
-using namespace std;
-class Component :
-	public Interface
+class Component
 {
 public:
 	Component();
 	Component(int, int);	
-	virtual string getName() = 0;
-	virtual void initializePieces() = 0;
-	virtual void updatePositonPieces() = 0;
+	
+	virtual ~Component();
+	
+	virtual std::string getName() = 0;
+	virtual void initializePieces() =0;
+	virtual void updatePositonPieces() =0;
 
-	vector<Piece> getPieces();
+	std::vector<Piece>getPieces();
 	Position getPosition();
 
 	int getHeight();
 	int getWidth();
-	virtual ~Component();
+
 protected:
-	vector<Piece>pieces;
+	std::vector<Piece>pieces;
 	Position position;
 };
-

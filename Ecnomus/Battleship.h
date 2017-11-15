@@ -7,7 +7,7 @@ public:
 	Battleship();
 	Battleship(int,int);
 	~Battleship();
-	string getName()override;
+	std::string getName()override;
 	void initializePieces()override;
 	void updatePositonPieces()override;
 };

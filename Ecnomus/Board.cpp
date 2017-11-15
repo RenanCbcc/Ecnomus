@@ -1,46 +1,97 @@
 #include "Board.h"
-#include "Submarine.h"
-#include "Seaplane.h"
-#include "Cruiser.h"
-#include "Battleship.h"
-#include "Aircraftcarrier.h"
 
 Board::Board()
 {
+	shufflingPieces();
 }
+
 
 void Board::shufflingPieces()
 {
-	components = { Submarine(), Submarine(), Submarine(), Submarine(),
-					Seaplane(), Seaplane(),	Seaplane(),	Cruiser(), Cruiser(),
-						Cruiser(), Battleship(), Battleship(), Aircraftcarrier() };
+
+	components = { new Submarine(), new Submarine(), new Submarine(), new Submarine(),
+		new Seaplane(), new Seaplane(),	new Seaplane(),	new Cruiser(), new Cruiser(),
+		new Cruiser(), new Battleship(), new Battleship(), new Aircraftcarrier() };
 	
-	/*
-	std::random_device rd;     // only used once to initialise (seed) engine
-	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
-	std::uniform_int_distribution<int> uni(min, max); // guaranteed unbiased
-
-	auto random_integer = uni(rng);
+	
 	while (components.size() > 0) {
-		int randomIndexList = ( rand.);
-		int randomRow = (new Random()).nextInt(15);
-		int randomColumn = (new Random()).nextInt(15);
+		int randomIndexVector = ( rand()% components.size());
+		int randomRow = (rand()%15);
+		int randomColumn = (rand()%15);
 
-		if (verifyAreaComponentSupport(components.get(randomIndexList), randomRow, randomColumn) && !verifyComponentArea(listComponents.get(randomIndexList), randomRow, randomColumn)) {
-			Component component = listComponents.get(randomIndexList);
-			component.getPosition().setCoordinatePosition(randomRow, randomColumn);
-			component.updatePositonPieces();
+		if (verifyAreaComponentSupport(components.at(randomIndexVector), randomRow, randomColumn) && !verifyComponentArea(components.at(randomIndexVector), randomRow, randomColumn)) {
+			Component *component = components.at(randomIndexVector);
+			component->getPosition().setCoordinatePosition(randomRow, randomColumn);
+			component->updatePositonPieces();
 
-			components.add(component);
+			
+			components.push_back(component);
 			putComponentInBoard(component);
 
-			listComponents.remove(randomIndexList);
+			components.erase(components.begin()+randomIndexVector);
+
 		}
-	}*/
+	}
 }
 
-
-
-Board::~Board()
+bool Board::verifyAreaComponentSupport(Component *component, int row, int column)
 {
+	if (component->getHeight() + row <= 15 && component->getWidth() + column <= 15) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+bool Board::verifyComponentArea(Component *component, int row, int column)
+{
+	for (Piece piece : component->getPieces()) {
+		if (area[piece.getPosition().getRow() + row][piece.getPosition().getColumn() + column]) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Board::verifyComponentKill(Component * component )
+{
+	
+	
+	for (Piece piece : component->getPieces()) {
+		if (piece.isStatus()) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+void Board::putComponentInBoard(Component *component)
+{
+	for (Piece piece : component->getPieces()) {
+		area[piece.getPosition().getRow()][piece.getPosition().getColumn()] = true;
+	}
+}
+
+void Board::resetBoard()
+{
+	for (int row = 0; row < area.size(); row++) {
+		for (int column = 0; column < area[row].size(); column++) {
+			area[row][column] = false;
+		}
+	}
+}
+
+Component * Board::getComponent(int row, int column)
+{
+
+	for (auto component : components) {
+		for (auto piece : component->getPieces()) {
+			if (piece.getPosition().getRow() == row && piece.getPosition().getColumn() == column) {
+				return component;
+			}
+		}
+	}
+	return nullptr;
 }

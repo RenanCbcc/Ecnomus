@@ -1,10 +1,13 @@
 #include "Component.h"
 
 
-
 Component::Component():position(0, 0) {}
 
 Component::Component(int row, int column):position(row, column){}
+
+Component::~Component()
+{
+}
 
 std::vector<Piece> Component::getPieces()
 {
@@ -40,9 +43,4 @@ int Component::getWidth()
 		}
 	}
 	return width;
-}
-
-
-Component::~Component()
-{
 }

@@ -20,7 +20,7 @@ Aircraftcarrier::~Aircraftcarrier()
 
 }
 
-string Aircraftcarrier::getName() {
+std::string Aircraftcarrier::getName() {
 	return "Aircraft carrier";
 }
 void Aircraftcarrier::initializePieces() {

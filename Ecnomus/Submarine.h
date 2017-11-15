@@ -7,7 +7,7 @@ public:
 	Submarine();
 	Submarine(int, int);
 	~Submarine();
-	string getName()override;
+	std::string getName()override;
 	void initializePieces()override;
 	void updatePositonPieces()override;
 };

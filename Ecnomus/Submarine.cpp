@@ -20,7 +20,7 @@ Submarine::~Submarine()
 
 }
 
-string Submarine::getName() {
+std::string Submarine::getName() {
 	return "Submarine";
 }
 void Submarine::initializePieces() {

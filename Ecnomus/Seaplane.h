@@ -7,7 +7,7 @@ public:
 	Seaplane();
 	Seaplane(int, int);
 	~Seaplane();
-	string getName()override;
+	std::string getName()override;
 	void initializePieces()override;
 	void updatePositonPieces()override;
 };

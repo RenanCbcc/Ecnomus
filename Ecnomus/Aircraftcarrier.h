@@ -7,7 +7,7 @@ public:
 	Aircraftcarrier();
 	Aircraftcarrier(int, int);
 	~Aircraftcarrier();
-	string getName() override;
+	std::string getName() override;
 	void initializePieces()override;
 	void updatePositonPieces()override;
 };

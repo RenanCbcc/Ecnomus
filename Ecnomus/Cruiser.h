@@ -8,7 +8,7 @@ public:
 	Cruiser(int,int);
 	~Cruiser();
 
-	string getName()override;
+	std::string getName()override;
 	void initializePieces()override;
 	void updatePositonPieces()override;
 

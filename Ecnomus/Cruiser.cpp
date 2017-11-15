@@ -21,7 +21,7 @@ Cruiser::~Cruiser()
 }
 
 
-string Cruiser::getName() {
+std::string Cruiser::getName() {
 	return "Cruiser";
 }
 void Cruiser::initializePieces() {
