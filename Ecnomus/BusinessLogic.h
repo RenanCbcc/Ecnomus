@@ -1,5 +1,6 @@
 #pragma once
 #include "Square.h"
+#include "Board.h"
 #include <vector>
 #include <string>
 #include<iostream>
@@ -16,7 +17,10 @@ public:
 
 private:
 	std::vector<std::vector<Square*>> adversarySquare;
+	Board board;
 	void createCleanBoard();
+	void manageCommand(int, Square *);
+	void manageCommand(int);
 	int moves_sent;
 	int responses_receiver;
 	int NUMBER_MOVES;

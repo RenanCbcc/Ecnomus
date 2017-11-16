@@ -4,6 +4,7 @@
 #include "Component.h"
 #include "Cruiser.h"
 #include "Seaplane.h"
+#include "Square.h"
 #include "Submarine.h"
 #include <random>
 
@@ -11,6 +12,7 @@ class Board
 {
 public:
 	Board();
+	void createCleanBoard();
 	void shufflingPieces();
 	bool verifyAreaComponentSupport(Component* , int, int);
 	bool verifyComponentArea(Component*, int, int);
@@ -22,6 +24,7 @@ public:
 	~Board();
 
 private:
+	std::vector<std::vector<Square*>> playerSquare;
 	std::vector<Component*> components;
 	std::vector<std::vector<bool>> area;
 };

@@ -5,6 +5,18 @@ Board::Board()
 	shufflingPieces();
 }
 
+void Board::createCleanBoard()
+{
+	for (int x = 0; x < 15; x++) {
+		std::vector <Square*> temp;
+		for (int y = 0; y < 15; y++)
+		{
+			temp.push_back(new Square(x, y, '#', false, true));
+		}
+		playerSquare.push_back(temp);
+	}
+
+}
 
 void Board::shufflingPieces()
 {
@@ -94,4 +106,8 @@ Component * Board::getComponent(int row, int column)
 		}
 	}
 	return nullptr;
+}
+
+Board::~Board()
+{
 }

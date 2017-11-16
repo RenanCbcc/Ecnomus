@@ -1,28 +1,27 @@
 #include "BusinessLogic.h"
 
-
-
-BusinessLogic::BusinessLogic()
+BusinessLogic::BusinessLogic():board()
 {
 	moves_sent = 0;
 	responses_receiver = 0;
 	NUMBER_MOVES = 3;
+	NUMBER_RESPONSES = 3;
 }
 
 void BusinessLogic::onSendCoordinateSquare(Square *square)
 {
-	if (moves_sent < NUMBER_MOVES && responses_receiver == 0 
+	increaseResponsePlay();
+	if (moves_sent < NUMBER_MOVES && responses_receiver == 0)
 	{
-		if (!adversarySquare[row][column].isFill())
+		
+		if (!adversarySquare[square->getRow()][square->getColumn()]->isFill())
 		{
-			sendCommand(XY_SQUARE, square->getRow(), square->getColumn());
+			manageCommand(XY_SQUARE, square);
 		}
-		void BusinessLogic::increaseResponsePlay()
-		{
-		}
+
 		else {
-			std::cout << "You wasted a move" << endl;
-			sendCommand(LOST_PLAY, new byte[]{ 0 }));
+			std::cout << "You wasted a move" << std::endl;
+			manageCommand(LOST_PLAY);
 		}
 
 		moves_sent++;
@@ -58,6 +57,16 @@ void BusinessLogic::createCleanBoard()
 		}
 		adversarySquare.push_back(temp);
 	}
+
+}
+
+void BusinessLogic::manageCommand(int, Square *)
+{
+
+}
+
+void BusinessLogic::manageCommand(int)
+{
 
 }
 
