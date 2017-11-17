@@ -14,17 +14,22 @@ public:
 	Board();
 	void createCleanBoard();
 	void shufflingPieces();
+	void putComponentInBoard(Component *);
+	void resetBoard();
+	void setValueSquare(int , int, bool );
+	void setSimbolSquare(int, int, char);
+	void setStatusValuePieceComponent(int, int, bool);
+	void immersePiece(int , int , bool);
+	bool verifyComponentsSubmerged();
+	bool getValueSquare(int, int);
 	bool verifyAreaComponentSupport(Component* , int, int);
 	bool verifyComponentArea(Component*, int, int);
 	bool verifyComponentKill(Component*);
-	void putComponentInBoard(Component *);	
-	void resetBoard();
 	Component* getComponent(int row, int column);
-	
+	std::vector<std::vector<Square*>> playerSquare;
 	~Board();
 
 private:
-	std::vector<std::vector<Square*>> playerSquare;
 	std::vector<Component*> components;
 	std::vector<std::vector<bool>> area;
 };

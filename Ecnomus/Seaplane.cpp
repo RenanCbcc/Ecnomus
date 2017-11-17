@@ -24,15 +24,15 @@ std::string Seaplane::getName() {
 }
 void Seaplane::initializePieces() {
 
-	pieces = {Piece(position.getRow(), position.getColumn() + 1),
-		Piece(position.getRow() + 1, position.getColumn()),
-		Piece(position.getRow() + 1, position.getColumn() + 2) };
+	pieces = { new Piece(position.getRow(), position.getColumn() + 1),
+		new Piece(position.getRow() + 1, position.getColumn()),
+		new Piece(position.getRow() + 1, position.getColumn() + 2) };
 
 }
 
 void Seaplane::updatePositonPieces() {
-	pieces[0].setCoordinatePosition(position.getRow(), position.getColumn() + 1);
-	pieces[1].setCoordinatePosition(position.getRow() + 1, position.getColumn());
-	pieces[2].setCoordinatePosition(position.getRow() + 1, position.getColumn() + 2);
+	pieces[0]->setCoordinatePosition(position.getRow(), position.getColumn() + 1);
+	pieces[1]->setCoordinatePosition(position.getRow() + 1, position.getColumn());
+	pieces[2]->setCoordinatePosition(position.getRow() + 1, position.getColumn() + 2);
 
 }

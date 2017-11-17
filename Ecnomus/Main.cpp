@@ -1,4 +1,5 @@
 #include<iostream>
+#include "BusinessLogic.h"
 #include <WS2tcpip.h>
 #pragma comment(lib, "ws2_32.lib")
 
@@ -12,22 +13,34 @@
 7.Disconnect.
 */
 
-void main() {
+
+#define DEFAULT_MSGBUFFLEN 512
+#define DEFAULT_COMBUFFLEN 2
+#define DEFAULT_PORT 1984
+
+
+void nain() {
 
 	//intialize socket
-	WSADATA wsDATA;
-	WORD ver = MAKEWORD(2, 2);
-	int wsOK = WSAStartup(ver, &wsDATA);
+	WSADATA wsaData;
+	int iResult;
+	SOCKET ListenSocket = INVALID_SOCKET;
+	SOCKET ClientSocket = INVALID_SOCKET;
 
-	if (wsOK != 0) {
+	WORD ver = MAKEWORD(2, 2);
+	
+	iResult = WSAStartup(ver, &wsaData);
+
+	
+	if (iResult = WSAStartup(ver, &wsaData)!= 0) {
 		std::cout << "Cannot initialize the socket! QUITTING!" << std::endl;
 		return;
 	}
 	//create a socket
 	//In  Unix systens a socket is just a number, but in windows is a typer
 	//socket(addres_family v4, I want a tcp connection, no flags);
-	SOCKET listening = socket(AF_INET, SOCK_STREAM, 0);
-	if (listening == INVALID_SOCKET) {
+	ListenSocket = socket(AF_INET, SOCK_STREAM, 0);
+	if (ListenSocket == INVALID_SOCKET) {
 		std::cout << "Cannot initialize the socket!	QUITTING!" << std::endl;
 		return;
 
@@ -38,20 +51,20 @@ void main() {
 	//I want to link socket and ip address
 	sockaddr_in hint;
 	hint.sin_family = AF_INET;
-	hint.sin_port = htons(1984); // host to network short
+	hint.sin_port = htons(DEFAULT_PORT); // host to network short
 	hint.sin_addr.S_un.S_addr = INADDR_ANY;
 
-	bind(listening, (sockaddr*)&hint, sizeof(hint));
+	bind(ListenSocket, (sockaddr*)&hint, sizeof(hint));
 
 	//Tell the socket is for listening
-	listen(listening, SOMAXCONN/*Number of maximum connections*/);
+	listen(ListenSocket, SOMAXCONN/*Number of maximum connections*/);
 
 	//Wait for a connection
 	sockaddr_in client;
 	int clientSize = sizeof(client);
-	SOCKET clienteSocket = accept(listening, (sockaddr*)&client, &clientSize); //Random socket that will be returnd for the client;
+	ClientSocket = accept(ListenSocket, (sockaddr*)&client, &clientSize); //Random socket that will be returnd for the client;
 
-	if (clienteSocket == INVALID_SOCKET) {
+	if (ClientSocket == INVALID_SOCKET) {
 		std::cout << "Cannot initialize the socket!	QUITTING!" << std::endl;
 		return;
 
@@ -73,33 +86,37 @@ void main() {
 			ntohs(client.sin_port) << std::endl;
 	}
 	//Close listening socket, i do not expect another clients.
-	closesocket(listening);
+	closesocket(ListenSocket);
 
+	BusinessLogic battleship;
+	char buff[DEFAULT_MSGBUFFLEN];
+	char request[] = {"Send corordenates X and Y"};
 	//while loop: accept and uppercase a message
-	char buff[4096];
 	while (true) {
-		ZeroMemory(buff, 4096);
+		ZeroMemory(buff, DEFAULT_MSGBUFFLEN);
+
+		send(ClientSocket, request, sizeof(request)+1, 0);
 		// Wait for client to send data
-		int bytesReceived = recv(clienteSocket, buff, 4096, 0);
-		if (bytesReceived == SOCKET_ERROR) {
+		iResult = recv(ClientSocket, buff, 4096, 0);
+		if (iResult == SOCKET_ERROR) {
 			std::cout << "Error in recv(). QUITTING" << std::endl;
 			break;
 		}
 
-		if (bytesReceived == 0) {
+		if (iResult == 0) {
 			std::cout << "Client disconnected ;(" << std::endl;
 			break;
 		}
 		//Process the instructions
-		for (int i = 0; i < bytesReceived; i++)
-		{
-			buff[i] = toupper(buff[i]);
-		}
-		std::cout << sizeof(bytesReceived);
-		send(clienteSocket, buff, bytesReceived + 1, 0);
+		battleship.print();
+		std::string answer = battleship.onSendCoordinateSquare(buff[0], buff[1]);
+		char response[sizeof(answer)+1];
+		strcpy(response, answer.c_str());
+		
+		send(ClientSocket, response, sizeof(response) + 1, 0);
 	}
 	//Close the socket
-	closesocket(clienteSocket);
+	closesocket(ClientSocket);
 
 	//Clean up socket
 	WSACleanup();

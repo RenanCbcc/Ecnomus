@@ -10,17 +10,14 @@ class BusinessLogic
 {
 public:
 	BusinessLogic();
-	void onSendCoordinateSquare(Square*);
+	std::string onSendCoordinateSquare(int,int);
 	void increaseResponsePlay();
 	void print();
 	~BusinessLogic();
 
 private:
-	std::vector<std::vector<Square*>> adversarySquare;
 	Board board;
-	void createCleanBoard();
-	void manageCommand(int, Square *);
-	void manageCommand(int);
+	std::string manageCommand(int, Square *);
 	int moves_sent;
 	int responses_receiver;
 	int NUMBER_MOVES;

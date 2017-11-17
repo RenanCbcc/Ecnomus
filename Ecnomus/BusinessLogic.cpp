@@ -3,42 +3,47 @@
 BusinessLogic::BusinessLogic():board()
 {
 	moves_sent = 0;
-	responses_receiver = 0;
 	NUMBER_MOVES = 3;
-	NUMBER_RESPONSES = 3;
+	
 }
 
-void BusinessLogic::onSendCoordinateSquare(Square *square)
+std::string BusinessLogic::onSendCoordinateSquare(int row, int column)
 {
-	increaseResponsePlay();
-	if (moves_sent < NUMBER_MOVES && responses_receiver == 0)
+	std::string response;
+	if (!( row >>15 && row <0 ) && !(column >> 15 && column <0))
 	{
 		
-		if (!adversarySquare[square->getRow()][square->getColumn()]->isFill())
+		if (!board.playerSquare[row][column]->isFill())
 		{
-			manageCommand(XY_SQUARE, square);
+			manageCommand(XY_SQUARE, board.playerSquare[row][column]);
 		}
 
 		else {
-			std::cout << "You wasted a move" << std::endl;
-			manageCommand(LOST_PLAY);
+			//std::cout << "You wasted a move" << std::endl;
+			response= "You wasted a move";
+			manageCommand(LOST_PLAY,nullptr);
 		}
 
 		moves_sent++;
 
 	}
+	else {
+		response = "Out of range";
+		//std::cout << "Out of range"<<std::endl;
+	}
+	return response;
 }
 
 
 void BusinessLogic::print()
 {
-	for (int i = 0; i < adversarySquare.size(); i++)
+	for (int i = 0; i < board.playerSquare.size(); i++)
 	{
-		for (int j = 0; j < adversarySquare[i].size(); j++)
+		for (int j = 0; j < board.playerSquare[i].size(); j++)
 		{
-			std::cout << "| " << adversarySquare[i][j]->getSquareSimbol();
+			std::cout<< "| " << board.playerSquare[i][j]->getSquareSimbol();
 		}
-		std::cout << "| " << std::endl;
+		std::cout<< "| " << std::endl;
 	}
 
 }
@@ -47,28 +52,47 @@ BusinessLogic::~BusinessLogic()
 {
 }
 
-void BusinessLogic::createCleanBoard()
+
+std::string BusinessLogic::manageCommand(int actionCommand, Square *square)
 {
-	for (int x = 0; x < 15; x++) {
-		std::vector <Square*> temp;
-		for (int y = 0; y < 15; y++)
+	std::string response;
+	increaseResponsePlay();
+	if (actionCommand == XY_SQUARE) 
+	{
+		if (board.getValueSquare(square->getRow(), square->getColumn())) 
 		{
-			temp.push_back(new Square(x, y, '#', false, true));
+			Component *component = board.getComponent(square->getRow(), square->getColumn());
+
+			board.immersePiece(square->getRow(), square->getColumn(), false);
+			board.setSimbolSquare(square->getRow(), square->getColumn(), 'X');
+
+			if (board.verifyComponentsSubmerged()) 
+			{
+				if (board.verifyComponentKill(component))
+				{
+					//std::cout << "You sank :" + component->getName() << std::endl;
+					response = "You sank :" + component->getName();
+				}else 
+				{
+					//std::cout <<  "You hit :" + component->getName() << std::endl;
+					response = "You hit : " + component->getName();
+				}
+			}else
+			{
+				//std::cout << "You lost the game. Search a new opponent." << std::endl;
+				response = "You lost the game. Search a new opponent.";
+			}
+
+		}else
+		{
+			board.setSimbolSquare(square->getRow(), square->getColumn(), ' ');
+			response = "Water";
 		}
-		adversarySquare.push_back(temp);
-	}
-
+		
+		}
+	return response;
 }
 
-void BusinessLogic::manageCommand(int, Square *)
-{
-
-}
-
-void BusinessLogic::manageCommand(int)
-{
-
-}
 
 void BusinessLogic::increaseResponsePlay(){
 responses_receiver++;

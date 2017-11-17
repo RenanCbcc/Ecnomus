@@ -1,7 +1,6 @@
 #include "Submarine.h"
 
 
-
 Submarine::Submarine()
 	:Component()
 {
@@ -25,10 +24,10 @@ std::string Submarine::getName() {
 }
 void Submarine::initializePieces() {
 
-	pieces = { Piece(position.getRow(), position.getColumn())};
+	pieces = { new Piece(position.getRow(), position.getColumn())};
 
 }
 
 void Submarine::updatePositonPieces() {
-	pieces[0].setCoordinatePosition(position.getRow(), position.getColumn());
+	pieces[0]->setCoordinatePosition(position.getRow(), position.getColumn());
 }

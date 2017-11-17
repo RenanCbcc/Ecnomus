@@ -25,19 +25,19 @@ std::string Aircraftcarrier::getName() {
 }
 void Aircraftcarrier::initializePieces() {
 
-	pieces ={	Piece(position.getRow(), position.getColumn()),
-				Piece(position.getRow(), position.getColumn() + 1),
-				Piece(position.getRow(), position.getColumn() + 2),
-				Piece(position.getRow(), position.getColumn() + 3),
-				Piece(position.getRow(), position.getColumn() + 4) };
+	pieces = {	new Piece(position.getRow(), position.getColumn()),
+		new Piece(position.getRow(), position.getColumn() + 1),
+		new 	Piece(position.getRow(), position.getColumn() + 2),
+		new 	Piece(position.getRow(), position.getColumn() + 3),
+		new 	Piece(position.getRow(), position.getColumn() + 4) };
 
 }
 
 void Aircraftcarrier::updatePositonPieces() {
-	pieces[0].setCoordinatePosition(position.getRow(), position.getColumn());
-	pieces[1].setCoordinatePosition(position.getRow(), position.getColumn() + 1);
-	pieces[2].setCoordinatePosition(position.getRow(), position.getColumn() + 2);
-	pieces[3].setCoordinatePosition(position.getRow(), position.getColumn() + 3);
-	pieces[4].setCoordinatePosition(position.getRow(), position.getColumn() + 4);
+	pieces[0]->setCoordinatePosition(position.getRow(), position.getColumn());
+	pieces[1]->setCoordinatePosition(position.getRow(), position.getColumn() + 1);
+	pieces[2]->setCoordinatePosition(position.getRow(), position.getColumn() + 2);
+	pieces[3]->setCoordinatePosition(position.getRow(), position.getColumn() + 3);
+	pieces[4]->setCoordinatePosition(position.getRow(), position.getColumn() + 4);
 
 }

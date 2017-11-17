@@ -5,6 +5,7 @@
 Battleship::Battleship()
 	:Component()
 {
+	initializePieces();
 }
 
 Battleship::Battleship(int row, int column)
@@ -25,18 +26,18 @@ std::string Battleship::getName()
 
 void Battleship::initializePieces()
 {
-	pieces = { Piece(position.getRow(), position.getColumn()),
-		Piece(position.getRow(), position.getColumn() + 1),
-		Piece(position.getRow(), position.getColumn() + 2),
-		Piece(position.getRow(), position.getColumn() + 3)};
+	pieces = { new Piece(position.getRow(), position.getColumn()),
+		new Piece(position.getRow(), position.getColumn() + 1),
+		new Piece(position.getRow(), position.getColumn() + 2),
+		new Piece(position.getRow(), position.getColumn() + 3)};
 
 }
 
 void Battleship::updatePositonPieces()
 {
-	pieces[0].setCoordinatePosition(position.getRow(), position.getColumn());
-	pieces[1].setCoordinatePosition(position.getRow(), position.getColumn() + 1);
-	pieces[2].setCoordinatePosition(position.getRow(), position.getColumn() + 2);
-	pieces[3].setCoordinatePosition(position.getRow(), position.getColumn() + 3);
+	pieces[0]->setCoordinatePosition(position.getRow(), position.getColumn());
+	pieces[1]->setCoordinatePosition(position.getRow(), position.getColumn() + 1);
+	pieces[2]->setCoordinatePosition(position.getRow(), position.getColumn() + 2);
+	pieces[3]->setCoordinatePosition(position.getRow(), position.getColumn() + 3);
 
 }

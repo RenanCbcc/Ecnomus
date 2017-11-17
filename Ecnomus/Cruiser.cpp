@@ -26,14 +26,14 @@ std::string Cruiser::getName() {
 }
 void Cruiser::initializePieces() {
 
-	pieces = { Piece(position.getRow(), position.getColumn()),
-		Piece(position.getRow(), position.getColumn() + 1),
+	pieces = { new Piece(position.getRow(), position.getColumn()),
+		new Piece(position.getRow(), position.getColumn() + 1),
 		};
 
 }
 
 void Cruiser::updatePositonPieces() {
-	pieces[0].setCoordinatePosition(position.getRow(), position.getColumn());
-	pieces[1].setCoordinatePosition(position.getRow(), position.getColumn() + 1);
+	pieces[0]->setCoordinatePosition(position.getRow(), position.getColumn());
+	pieces[1]->setCoordinatePosition(position.getRow(), position.getColumn() + 1);
 
 }

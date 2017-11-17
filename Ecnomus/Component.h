@@ -17,13 +17,13 @@ public:
 	virtual void initializePieces() =0;
 	virtual void updatePositonPieces() =0;
 
-	std::vector<Piece>getPieces();
+	std::vector<Piece*> &getPieces();
 	Position getPosition();
 
 	int getHeight();
 	int getWidth();
 
 protected:
-	std::vector<Piece>pieces;
+	std::vector<Piece*>pieces;
 	Position position;
 };
