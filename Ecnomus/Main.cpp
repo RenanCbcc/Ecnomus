@@ -1,4 +1,4 @@
-#include<iostream>
+﻿#include<iostream>
 #include "BusinessLogic.h"
 #include <WS2tcpip.h>
 #pragma comment(lib, "ws2_32.lib")
@@ -13,113 +13,103 @@
 7.Disconnect.
 */
 
+using namespace std;
 
-#define DEFAULT_MSGBUFFLEN 512
-#define DEFAULT_COMBUFFLEN 2
-#define DEFAULT_PORT 1984
+void main() {
 
-
-void nain() {
-
-	//intialize socket
-	WSADATA wsaData;
-	int iResult;
-	SOCKET ListenSocket = INVALID_SOCKET;
-	SOCKET ClientSocket = INVALID_SOCKET;
-
+	// Initialize Winsock
+	WSAData data;
 	WORD ver = MAKEWORD(2, 2);
-	
-	iResult = WSAStartup(ver, &wsaData);
 
-	
-	if (iResult = WSAStartup(ver, &wsaData)!= 0) {
-		std::cout << "Cannot initialize the socket! QUITTING!" << std::endl;
+	int wsOk = WSAStartup(ver, &data);
+	if (wsOk != 0)
+	{
+		cerr << "Can't start winsock! Tactical Retreat!" << endl;
 		return;
 	}
-	//create a socket
-	//In  Unix systens a socket is just a number, but in windows is a typer
-	//socket(addres_family v4, I want a tcp connection, no flags);
-	ListenSocket = socket(AF_INET, SOCK_STREAM, 0);
-	if (ListenSocket == INVALID_SOCKET) {
-		std::cout << "Cannot initialize the socket!	QUITTING!" << std::endl;
-		return;
 
+	// Create socket
+	SOCKET listening = socket(AF_INET, SOCK_STREAM, 0);
+	if (listening == INVALID_SOCKET)
+	{
+		cerr << "Couldn't create socket!" << endl;
+		return;
 	}
 
-
-	//bind the socket to ip address
-	//I want to link socket and ip address
+	// Bind the ip address and port to a socket
 	sockaddr_in hint;
 	hint.sin_family = AF_INET;
-	hint.sin_port = htons(DEFAULT_PORT); // host to network short
-	hint.sin_addr.S_un.S_addr = INADDR_ANY;
+	hint.sin_port = htons(54000);
+	hint.sin_addr.S_un.S_addr = INADDR_ANY; // or inet_pton
 
-	bind(ListenSocket, (sockaddr*)&hint, sizeof(hint));
+	bind(listening, (sockaddr*)&hint, sizeof(hint));
 
-	//Tell the socket is for listening
-	listen(ListenSocket, SOMAXCONN/*Number of maximum connections*/);
+	//Tell winsock the socket is for listening
+	listen(listening, SOMAXCONN);
 
-	//Wait for a connection
+	// Wait for a connection
 	sockaddr_in client;
 	int clientSize = sizeof(client);
-	ClientSocket = accept(ListenSocket, (sockaddr*)&client, &clientSize); //Random socket that will be returnd for the client;
 
-	if (ClientSocket == INVALID_SOCKET) {
-		std::cout << "Cannot initialize the socket!	QUITTING!" << std::endl;
-		return;
+	SOCKET clientSocket = accept(listening, (sockaddr*)&client, &clientSize);
 
-	}
+	char host[NI_MAXHOST];  // Client's remote name
+	char service[NI_MAXHOST]; // Service (i.e port)
 
-	char host[NI_MAXHOST];// remote name of the client.
-	char service[NI_MAXSERV];
+	ZeroMemory(host, NI_MAXHOST);
+	ZeroMemory(service, NI_MAXHOST);
 
-	ZeroMemory(host, NI_MAXHOST); // set memory.
-	ZeroMemory(service, NI_MAXSERV);
-	//check if we can get any infomation
 	if (getnameinfo((sockaddr*)&client, sizeof(client), host, NI_MAXHOST, service, NI_MAXSERV, 0) == 0)
 	{
-		std::cout << host << " connected on port " << service << std::endl;
+		cout << " connected on port " << service << endl;
 	}
-	else {
+	else
+	{
 		inet_ntop(AF_INET, &client.sin_addr, host, NI_MAXHOST);
-		std::cout << host << " connected on port " <<
-			ntohs(client.sin_port) << std::endl;
+		cout << host << " connected on port" <<
+			htons(client.sin_port) << endl;
 	}
-	//Close listening socket, i do not expect another clients.
-	closesocket(ListenSocket);
 
+	// Close listening socket
+	closesocket(listening);
+	cout << "Server created!" << endl << "Waiting for a Player..." << endl;
+
+	// While loop: accept and echo message back to client
+	char buffer[512];
 	BusinessLogic battleship;
-	char buff[DEFAULT_MSGBUFFLEN];
-	char request[] = {"Send corordenates X and Y"};
-	//while loop: accept and uppercase a message
-	while (true) {
-		ZeroMemory(buff, DEFAULT_MSGBUFFLEN);
+	battleship.print();
+	while (true)
+	{
+		ZeroMemory(buffer, 512);
 
-		send(ClientSocket, request, sizeof(request)+1, 0);
 		// Wait for client to send data
-		iResult = recv(ClientSocket, buff, 4096, 0);
-		if (iResult == SOCKET_ERROR) {
-			std::cout << "Error in recv(). QUITTING" << std::endl;
+		int bytesRecieved = recv(clientSocket, buffer, 512, 0);
+		if (bytesRecieved == SOCKET_ERROR)
+		{
+			cerr << "Error in recv(). Quitting" << endl;
 			break;
 		}
 
-		if (iResult == 0) {
-			std::cout << "Client disconnected ;(" << std::endl;
+		if (bytesRecieved == 0)
+		{
+			cout << "client disconnected " << endl;
 			break;
 		}
-		//Process the instructions
+
+		std::string answer = battleship.onSendCoordinateSquare(buffer[0]-'0', buffer[2] - '0');
 		battleship.print();
-		std::string answer = battleship.onSendCoordinateSquare(buff[0], buff[1]);
-		char response[sizeof(answer)+1];
+		char response[sizeof(answer) + 1];
 		strcpy(response, answer.c_str());
+		send(clientSocket, response, answer.length() + 1, 0);
 		
-		send(ClientSocket, response, sizeof(response) + 1, 0);
+		std::cout << std::endl << "Bot turn. Enter co-ordinates x,y";
+
 	}
-	//Close the socket
-	closesocket(ClientSocket);
 
-	//Clean up socket
+	// Close
+	closesocket(clientSocket);
+
+	// Cleanup Winsock
 	WSACleanup();
-
 }
 

@@ -10,12 +10,12 @@ BusinessLogic::BusinessLogic():board()
 std::string BusinessLogic::onSendCoordinateSquare(int row, int column)
 {
 	std::string response;
-	if (!( row >>15 && row <0 ) && !(column >> 15 && column <0))
+	if (!( row >15 && row <0 ) && !(column > 15 && column <0))
 	{
 		
 		if (!board.playerSquare[row][column]->isFill())
 		{
-			manageCommand(XY_SQUARE, board.playerSquare[row][column]);
+			return manageCommand(XY_SQUARE, board.playerSquare[row][column]);
 		}
 
 		else {
@@ -37,6 +37,10 @@ std::string BusinessLogic::onSendCoordinateSquare(int row, int column)
 
 void BusinessLogic::print()
 {
+	for (int i = 0; i < board.playerSquare.size(); i++) {
+		std::cout << "---";
+	}
+	std::cout << " " << std::endl;
 	for (int i = 0; i < board.playerSquare.size(); i++)
 	{
 		for (int j = 0; j < board.playerSquare[i].size(); j++)
@@ -45,7 +49,11 @@ void BusinessLogic::print()
 		}
 		std::cout<< "| " << std::endl;
 	}
+	for (int i = 0; i < board.playerSquare.size(); i++) {
+		std::cout << "---";
+	}
 
+	std::cout << " " << std::endl;
 }
 
 BusinessLogic::~BusinessLogic()
