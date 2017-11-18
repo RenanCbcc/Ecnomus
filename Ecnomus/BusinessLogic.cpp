@@ -9,18 +9,18 @@ BusinessLogic::BusinessLogic():board()
 
 std::string BusinessLogic::onSendCoordinateSquare(int row, int column)
 {
-	std::string response;
+	std::string response="Error onSendCoordinateSquare";
 	if (!( row >15 && row <0 ) && !(column > 15 && column <0))
 	{
-		
 		if (!board.playerSquare[row][column]->isFill())
 		{
+			
 			return manageCommand(XY_SQUARE, board.playerSquare[row][column]);
 		}
 
 		else {
-			//std::cout << "You wasted a move" << std::endl;
-			response= "You wasted a move";
+			//std::cout << "You wasted a move" << std::endl;			
+			response = "You wasted a move";
 			manageCommand(LOST_PLAY,nullptr);
 		}
 
@@ -28,15 +28,17 @@ std::string BusinessLogic::onSendCoordinateSquare(int row, int column)
 
 	}
 	else {
-		response = "Out of range";
+		 response  = "Out of range";
 		//std::cout << "Out of range"<<std::endl;
 	}
+
 	return response;
 }
 
 
 void BusinessLogic::print()
 {
+
 	for (int i = 0; i < board.playerSquare.size(); i++) {
 		std::cout << "---";
 	}
@@ -62,8 +64,8 @@ BusinessLogic::~BusinessLogic()
 
 
 std::string BusinessLogic::manageCommand(int actionCommand, Square *square)
-{
-	std::string response;
+{ 
+	std::string result = "Error manageCommand";
 	increaseResponsePlay();
 	if (actionCommand == XY_SQUARE) 
 	{
@@ -79,32 +81,31 @@ std::string BusinessLogic::manageCommand(int actionCommand, Square *square)
 				if (board.verifyComponentKill(component))
 				{
 					//std::cout << "You sank :" + component->getName() << std::endl;
-					response = "You sank :" + component->getName();
+					result = "You sank :" + component->getName();
 				}else 
 				{
 					//std::cout <<  "You hit :" + component->getName() << std::endl;
-					response = "You hit : " + component->getName();
+					result = "You hit : " + component->getName();
 				}
 			}else
 			{
 				//std::cout << "You lost the game. Search a new opponent." << std::endl;
-				response = "You lost the game. Search a new opponent.";
+				result = "You lost the game. Search a new opponent.";
 			}
 
 		}else
 		{
 			board.setSimbolSquare(square->getRow(), square->getColumn(), ' ');
-			response = "Water";
+			result = "Water";
 		}
 		
 		}
-	return response;
+	return result;
 }
 
 
 void BusinessLogic::increaseResponsePlay(){
 responses_receiver++;
-
 if (responses_receiver == NUMBER_RESPONSES) {
 	std::cout << "Your turn to play"<< std::endl;
 	moves_sent = 0;

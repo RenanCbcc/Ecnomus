@@ -1,8 +1,14 @@
-﻿#include<iostream>
+﻿#include <iostream>
 #include "BusinessLogic.h"
 #include <WS2tcpip.h>
 #pragma comment(lib, "ws2_32.lib")
 
+struct Packet
+{
+	int x, y, length;
+	char *msg;
+	
+};
 /*
 1.Initialize Winsock.
 2.Create a socket.
@@ -75,15 +81,15 @@ void main() {
 	cout << "Server created!" << endl << "Waiting for a Player..." << endl;
 
 	// While loop: accept and echo message back to client
-	char buffer[512];
-	BusinessLogic battleship;
-	battleship.print();
+	BusinessLogic opponentBoard;
+	char buffer[sizeof(Packet)];
+	opponentBoard.print();
 	while (true)
 	{
-		ZeroMemory(buffer, 512);
+		ZeroMemory(buffer, sizeof(Packet));
 
 		// Wait for client to send data
-		int bytesRecieved = recv(clientSocket, buffer, 512, 0);
+		int bytesRecieved = recv(clientSocket, buffer, sizeof(Packet), 0);
 		if (bytesRecieved == SOCKET_ERROR)
 		{
 			cerr << "Error in recv(). Quitting" << endl;
@@ -96,13 +102,24 @@ void main() {
 			break;
 		}
 
-		std::string answer = battleship.onSendCoordinateSquare(buffer[0]-'0', buffer[2] - '0');
-		battleship.print();
-		char response[sizeof(answer) + 1];
-		strcpy(response, answer.c_str());
-		send(clientSocket, response, answer.length() + 1, 0);
+		Packet *msgrcv = reinterpret_cast<Packet*>(buffer);
+		std::string result  = opponentBoard.onSendCoordinateSquare(msgrcv->x, msgrcv->y);
 		
-		std::cout << std::endl << "Bot turn. Enter co-ordinates x,y";
+		std::cout << "X >" << msgrcv->x << " Y >" << msgrcv->y << std::endl;
+		std::cout <<"Result: "<<  result << std::endl;
+		opponentBoard.print();
+
+		Packet packet;
+		char response_ptr[sizeof(result) + 1];
+		strcpy(response_ptr, result.c_str());
+		packet.msg = response_ptr;		
+		packet.length = result.length();
+		
+		std::cout << std::endl << "Bot turn. Enter co-sordinates x (enter) y (enter)" << std::endl;
+		std::cin >> packet.x >> packet.y;
+
+		char* tmp = reinterpret_cast<char*>(&packet);
+		send(clientSocket, tmp, sizeof(packet) + 1, 0);		
 
 	}
 
