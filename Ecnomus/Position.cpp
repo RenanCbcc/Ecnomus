@@ -28,8 +28,8 @@ void Position::setColumn(int column)
 	this->column = column;
 }
 
-void Position::setCoordinatePosition(int, int)
-{
+void Position::setCoordinatePosition(int row, int column){
+
 }
 
 Position::~Position()

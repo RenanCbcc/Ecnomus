@@ -105,22 +105,27 @@ void main() {
 		Packet *msgrcv = reinterpret_cast<Packet*>(buffer);
 		std::string result  = opponentBoard.onSendCoordinateSquare(msgrcv->x, msgrcv->y);
 		
+		std::cout << "Player sent>>" << std::endl;
 		std::cout << "X >" << msgrcv->x << " Y >" << msgrcv->y << std::endl;
-		std::cout <<"Result: "<<  result << std::endl;
-		opponentBoard.print();
-
+		std::cout <<"Result on Bot bord: "<<  result << std::endl;
+		
 		Packet packet;
 		char response_ptr[sizeof(result) + 1];
 		strcpy(response_ptr, result.c_str());
 		packet.msg = response_ptr;		
 		packet.length = result.length();
 		
-		std::cout << std::endl << "Bot turn. Enter co-sordinates x (enter) y (enter)" << std::endl;
+	
+		std::cout << std::endl << "Bot turn. Enter coordinates x (enter) y (enter)" << std::endl;
 		std::cin >> packet.x >> packet.y;
 
 		char* tmp = reinterpret_cast<char*>(&packet);
-		send(clientSocket, tmp, sizeof(packet) + 1, 0);		
+		int sendResult = send(clientSocket, tmp, sizeof(packet) + 1, 0);
+		if (sendResult != SOCKET_ERROR)
+		{
+			std::cout << "Player turn>>" << std::endl;
 
+		}
 	}
 
 	// Close

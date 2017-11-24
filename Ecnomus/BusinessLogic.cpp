@@ -10,7 +10,7 @@ BusinessLogic::BusinessLogic():board()
 std::string BusinessLogic::onSendCoordinateSquare(int row, int column)
 {
 	std::string response="Error onSendCoordinateSquare";
-	if (!( row >15 && row <0 ) && !(column > 15 && column <0))
+	if (!( row >15 || row <0 ) && !(column > 15 || column <0))
 	{
 		if (!board.playerSquare[row][column]->isFill())
 		{
@@ -100,6 +100,7 @@ std::string BusinessLogic::manageCommand(int actionCommand, Square *square)
 		}
 		
 		}
+	print();
 	return result;
 }
 
